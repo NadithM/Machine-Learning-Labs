@@ -4,7 +4,7 @@ from sympy import *
 
 """
 my E number =e12405
-which turn out my function is just a y=mx
+which turned out my function is just a y=mx
  f(x)=-4
  
 So i took some random function since theres no point of doing lab to above function
@@ -41,8 +41,20 @@ Ex. 4
 """
 x = Symbol('x')
 
-def GDA(function,current_x,learning_rate,iterationsMax,precision,maxDivergence):
-        yprime = function.diff(x)
+
+class Function :
+        def __init__(self,y):
+                self.function=y
+
+        def get_Function(self):
+                return self.function
+
+        def getDerivative(self,x):
+                return self.function.diff(x)
+
+
+def GDA(fun,current_x,learning_rate,iterationsMax,precision,maxDivergence):
+        yprime = fun.getDerivative(x)
         iterations = 0
         check = 0
         while True:
@@ -65,11 +77,14 @@ def GDA(function,current_x,learning_rate,iterationsMax,precision,maxDivergence):
 
 if __name__ == "__main__":
 
-        plt.subplots_adjust(hspace=0.57)
+        plt.subplots_adjust(hspace=0.57,right=0.71)
         axes1 = plt.subplot(2,1, 1)
         axes2 = plt.subplot(2,1, 2)
+
+
         # Function
         function = 0.2 * x ** 3 + x ** 2 + x + 8
+        fun = Function(function)
         learning_rate = 1
         iterationsMax = 10000
         precision = 1.0 / 10000
@@ -77,7 +92,7 @@ if __name__ == "__main__":
         current_x= 1
 
         print("Calculating minima for leaning rate=0.01...")
-        minima = GDA(function,current_x,learning_rate,iterationsMax,precision,maxDivergence)
+        minima = GDA(fun,current_x,learning_rate,iterationsMax,precision,maxDivergence)
         print("Calculation is finished")
         if minima == nan :
                 print "\n"
@@ -85,15 +100,16 @@ if __name__ == "__main__":
                 print("value of current_x (minima):", minima)
                 domain = np.linspace(-2, 2, 1000)
                 codomain = np.array([N(function.subs(x, value)) for value in domain])
-                axes1.plot(domain, codomain, color='r',label='f(x)')
+                axes1.plot(domain, codomain, color='r',label="f(x)")
                 axes1.set_title("Behavior of f(x)=0.2 x^3 + x^2 + x + 8\n Learning rate = 0.01")
                 domain = [minima]
                 codomain = np.array([N(function.subs(x, value)) for value in domain])
-                axes1.plot(domain, codomain, color='g', marker="*",label='Minima of f(x)')
+                axes1.plot(domain, codomain, color='g', marker="*",label="Local Minima")
 
+                axes1.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
         print("Calculating minima for leaning rate=10.0   .......")
         learning_rate = 10.0
-        minima = GDA(function, current_x, learning_rate, iterationsMax, precision, maxDivergence)
+        minima = GDA(fun, current_x, learning_rate, iterationsMax, precision, maxDivergence)
         print("Calculation is finished")
         if minima == nan :
                 print "\n"
@@ -105,6 +121,7 @@ if __name__ == "__main__":
                 axes2.set_title("Behavior of f(x)=0.2 x^3 + x^2 + x + 8\n Learning rate = 10.0")
                 domain = [minima]
                 codomain = np.array([N(function.subs(x, value)) for value in domain])
-                axes2.plot(domain, codomain, color='g', marker="*",label='Minima of f(x)')
+                axes2.plot(domain, codomain, color='g', marker="*",label='Local Minima')
+                axes2.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 
         plt.show()
